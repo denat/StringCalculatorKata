@@ -88,5 +88,23 @@ namespace StringCalculatorTests
             var result = calculator.Add("//;\n1;2;3;4;5;6;7;8;9;10");
             Assert.IsTrue(result == 55);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestAddTwoNumbersSingleNegativeNumber()
+        {
+            var calculator = new Calculator();
+
+            calculator.Add("5,-1");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestAddTwoNumbersFiveNegativeNumbers()
+        {
+            var calculator = new Calculator();
+
+            calculator.Add("//;\n1;-2;3;4;-5;6;-7;-8;9;-10");
+        }
     }
 }
