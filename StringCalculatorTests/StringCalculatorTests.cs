@@ -100,11 +100,38 @@ namespace StringCalculatorTests
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void TestAddTwoNumbersFiveNegativeNumbers()
+        public void TestAddTenNumbersFiveNegativeNumbers()
         {
             var calculator = new Calculator();
 
             calculator.Add("//;\n1;-2;3;4;-5;6;-7;-8;9;-10");
+        }
+
+        [TestMethod]
+        public void TestIgnoreNumbersOver1000()
+        {
+            var calculator = new Calculator();
+
+            var result = calculator.Add("5,1001");
+            Assert.IsTrue(result == 5);
+
+            result = calculator.Add("2,2000,5,1001");
+            Assert.IsTrue(result == 7);
+
+            result = calculator.Add("1000,1000,1001");
+            Assert.IsTrue(result == 2000);
+        }
+
+        [TestMethod]
+        public void TestDelimitersOfAnyLength()
+        {
+            var calculator = new Calculator();
+
+            var result = calculator.Add("//***\n1***2***3");
+            Assert.IsTrue(result == 6);
+
+            result = calculator.Add("//***\n5***6***7");
+            Assert.IsTrue(result == 18);
         }
     }
 }

@@ -8,27 +8,28 @@ namespace StringCalculator
 {
     public class Calculator
     {
+        private static string NewDelimiterNotation = "//{0}\n"; 
+
         public int Add(string numbers)
         {
             if (numbers == "")
                 return 0;
 
-            char[] delimiters = null;
+            string[] delimiter = null;
             if (IsNewDelimiterSet(numbers)) {
-                delimiters = GetNewDelimiter(numbers);
-                numbers = numbers.Substring(4);
+                delimiter = GetNewDelimiter(numbers);
+                numbers = numbers.Substring(string.Format(NewDelimiterNotation, delimiter[0]).Length);
             }
             else
-                delimiters = new char[] { ',', '\n' };
+                delimiter = new string[] { ",", "\n" };
 
-            var nums = numbers.Split(delimiters).Select(x => int.Parse(x));
+            var nums = numbers.Split(delimiter, StringSplitOptions.None).Select(x => int.Parse(x));
 
-            var negativeNumbers = GetNegativeNumbers(nums);
-            if (negativeNumbers.Count() > 0)
-                throw new Exception("Negatives not allowed: " + string.Join(", ", negativeNumbers));
+            CheckForNegativeNumbers(nums);
+
+            nums = FilterInvalidNumbers(nums);
 
             var result = 0;
-
             foreach (var num in nums)
             {
                 result += num;
@@ -37,15 +38,27 @@ namespace StringCalculator
             return result;
         }
 
+        private IEnumerable<int> FilterInvalidNumbers(IEnumerable<int> nums)
+        {
+            return nums.Where(x => x <= 1000);
+        }
+
+        private void CheckForNegativeNumbers(IEnumerable<int> nums)
+        {
+            var negativeNumbers = GetNegativeNumbers(nums);
+            if (negativeNumbers.Count() > 0)
+                throw new Exception("Negatives not allowed: " + string.Join(", ", negativeNumbers));
+        }
+
         private bool IsNewDelimiterSet(string numbers)
         {
             return numbers.StartsWith("//");
         }
 
-        private char[] GetNewDelimiter(string numbers)
+        private string[] GetNewDelimiter(string numbers)
         {
-            var delimiter = numbers.Substring(2, 1)[0];
-            return new char[] { delimiter };
+            var delimiter = numbers.Substring(2, numbers.IndexOf('\n')-2);
+            return new string[] { delimiter };
         }
 
         private IEnumerable<int> GetNegativeNumbers(IEnumerable<int> numbers)
