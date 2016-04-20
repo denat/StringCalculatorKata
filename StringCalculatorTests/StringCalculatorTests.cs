@@ -127,11 +127,29 @@ namespace StringCalculatorTests
         {
             var calculator = new Calculator();
 
-            var result = calculator.Add("//***\n1***2***3");
+            var result = calculator.Add("//[***]\n1***2***3");
             Assert.IsTrue(result == 6);
 
-            result = calculator.Add("//***\n5***6***7");
+            result = calculator.Add("//[^%$^%%]\n5^%$^%%6^%$^%%7");
             Assert.IsTrue(result == 18);
+        }
+
+        [TestMethod]
+        public void TestMultipleNewDelimiters()
+        {
+            var calculator = new Calculator();
+
+            var result = calculator.Add("//[%][#]\n1#2%3");
+            Assert.IsTrue(result == 6);
+        }
+
+        [TestMethod]
+        public void TestMultipleNewDelimitersOfAnySize()
+        {
+            var calculator = new Calculator();
+
+            var result = calculator.Add("//[%%%][###]\n1###2%%%3");
+            Assert.IsTrue(result == 6);
         }
     }
 }
