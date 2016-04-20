@@ -9,26 +9,23 @@ namespace StringCalculator
 {
     public class Calculator
     {
-        private static string NewDelimiterNotation = "//{0}\n";
-        private static string NewLargeDelimiterNotation = "//[{0}]\n";
-
         public int Add(string numbers)
         {
             if (numbers == "")
                 return 0;
 
             string[] delimiters = null;
-            if (AreNewDelimitersSet(numbers))
+            if (NewDelimitersGiven(numbers))
             {
                 delimiters = GetNewDelimiters(numbers);
 
                 var offset = 0;
-                var extras = delimiters.Length > 1 ? 2 : (delimiters[0].Length > 1 ? 2 : 0);
+                var sqBracketsLength = delimiters.Length > 1 ? 2 : (delimiters[0].Length > 1 ? 2 : 0);
 
                 // Multiple delimiters
                 foreach (var d in delimiters)
                 {
-                    offset += d.Length + extras;
+                    offset += d.Length + sqBracketsLength;
                 }
 
                 numbers = numbers.Substring(3 + offset);
@@ -36,34 +33,28 @@ namespace StringCalculator
             else
                 delimiters = new string[] { ",", "\n" }; // Default delimiters
 
-            var nums = numbers.Split(delimiters, StringSplitOptions.None).Select(x => int.Parse(x));
+            var values = numbers.Split(delimiters, StringSplitOptions.None).Select(x => int.Parse(x));
 
-            CheckForNegativeNumbers(nums);
+            CheckForNegativeValues(values);
 
-            nums = FilterInvalidNumbers(nums);
+            values = FilterInvalidValues(values);
 
-            var result = 0;
-            foreach (var num in nums)
-            {
-                result += num;
-            }
-
-            return result;
+            return values.Sum();
         }
 
-        private IEnumerable<int> FilterInvalidNumbers(IEnumerable<int> nums)
+        private IEnumerable<int> FilterInvalidValues(IEnumerable<int> nums)
         {
             return nums.Where(x => x <= 1000);
         }
 
-        private void CheckForNegativeNumbers(IEnumerable<int> nums)
+        private void CheckForNegativeValues(IEnumerable<int> nums)
         {
             var negativeNumbers = GetNegativeNumbers(nums);
             if (negativeNumbers.Count() > 0)
                 throw new Exception("Negatives not allowed: " + string.Join(", ", negativeNumbers));
         }
 
-        private bool AreNewDelimitersSet(string numbers)
+        private bool NewDelimitersGiven(string numbers)
         {
             return numbers.StartsWith("//");
         }
