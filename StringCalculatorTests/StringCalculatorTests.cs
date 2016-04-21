@@ -8,7 +8,7 @@ namespace StringCalculatorTests
     public class StringCalculatorTests
     {
         [TestMethod]
-        public void TestAddEmptyString()
+        public void Add_EmptyStringAsInput_ReturnsZero()
         {
             var result = Add("");
 
@@ -16,7 +16,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddSingleNumber()
+        public void Add_SingleNumberAsInput_ReturnsSameNumber()
         {
             var result = Add("1");
             Assert.IsTrue(result == 1);
@@ -26,7 +26,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTwoNumbers()
+        public void Add_TwoNumbersAsInput_ReturnsSum()
         {
             var result = Add("1,2");
             Assert.IsTrue(result == 3);
@@ -36,7 +36,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTenNumbers()
+        public void Add_MoreThanTwoNumbersAsInput_ReturnsSum()
         {
             var result = Add("1,2,3,4,5,1,2,3,4,5");
             Assert.IsTrue(result == 30);
@@ -46,7 +46,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTwoNumbersWithNewLines()
+        public void Add_ThreeNumbersWithNewLinesAndCommas_ReturnsSum()
         {
             var result = Add("1\n2,3");
 
@@ -54,7 +54,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTenNumbersWithNewLines()
+        public void Add_MultipleNumbersWithNewLinesAndCommas_ReturnsSum()
         {
             var result = Add("1\n2,3\n4\n5\n6,7\n8\n9\n10");
 
@@ -62,7 +62,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTwoNumbersWithNewDelimiter()
+        public void Add_TwoNumbersWithNewDelimiter_ReturnsSum()
         {
             var result = Add("//;\n5;6");
 
@@ -70,7 +70,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestAddTenNumbersWithNewDelimiter()
+        public void Add_MultipleNumbersWithNewDelimiter_ReturnsSum()
         {
             var result = Add("//;\n1;2;3;4;5;6;7;8;9;10");
 
@@ -79,20 +79,20 @@ namespace StringCalculatorTests
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void TestAddTwoNumbersSingleNegativeNumber()
+        public void Add_NegativeNumberAsSecondParameter_ThrowsException()
         {
             Add("5,-1");
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
-        public void TestAddTenNumbersFiveNegativeNumbers()
+        public void Add_MultipleNegativeNumbers_ThrowsException()
         {
             Add("//;\n1;-2;3;4;-5;6;-7;-8;9;-10");
         }
 
         [TestMethod]
-        public void TestIgnoreNumbersOver1000()
+        public void Add_IgnoreNumbersOver1000_ReturnsSum()
         {
             var result = Add("5,1001");
             Assert.IsTrue(result == 5);
@@ -105,7 +105,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestDelimitersOfAnyLength()
+        public void Add_NewDelimiterOfAnyLength_ReturnsSum()
         {
             var result = Add("//[***]\n1***2***3");
             Assert.IsTrue(result == 6);
@@ -115,7 +115,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestMultipleNewDelimiters()
+        public void Add_MultipleNewDelimiters_ReturnsSum()
         {
             var result = Add("//[%][#]\n1#2%3");
 
@@ -123,7 +123,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void TestMultipleNewDelimitersOfAnySize()
+        public void Add_MultipleNewDelimitersOfAnySize_ReturnsSum()
         {
             var result = Add("//[%%%][###]\n1###2%%%3");
 
